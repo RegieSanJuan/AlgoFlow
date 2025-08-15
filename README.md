@@ -218,8 +218,8 @@ AlgoFlow/
 │   ├── 📄 layout.tsx         # Root layout with theme provider
 │   ├── 📄 page.tsx           # Homepage with algorithm cards
 │   ├── 📄 loading.tsx        # Loading UI component
-│   └── 📁 fcfs/              # FCFS algorithm implementation
-│       └── 📄 page.tsx       # Interactive FCFS calculator
+│   └── 📁 sample/            # sample algorithm implementation
+│       └── 📄 page.tsx       # Interactive sample calculator
 ├── 📁 components/             # Reusable UI components
 │   ├── 📄 theme-provider.tsx # Theme context provider
 │   └── 📁 ui/                # shadcn/ui components
