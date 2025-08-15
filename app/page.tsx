@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { Search, Play, Cpu, HardDrive, Moon, Sun } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent } from "@/components/ui/card"
-import { useState, useMemo } from "react"
-import { useTheme } from "next-themes"
-import { useRouter } from "next/navigation"
+import { Search, Play, Cpu, HardDrive, Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { useState, useMemo } from "react";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
-  const { theme, setTheme } = useTheme()
-  const [searchQuery, setSearchQuery] = useState("")
-  const router = useRouter()
+  const { theme, setTheme } = useTheme();
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   const diskAlgorithms = [
     {
@@ -56,7 +56,7 @@ export default function HomePage() {
       description: "Circular LOOK algorithm",
       category: "disk",
     },
-  ]
+  ];
 
   const cpuNonPreemptive = [
     {
@@ -80,7 +80,7 @@ export default function HomePage() {
       description: "Based on priority values",
       category: "cpu-non-preemptive",
     },
-  ]
+  ];
 
   const cpuPreemptive = [
     {
@@ -118,10 +118,14 @@ export default function HomePage() {
       description: "Dynamic priority queues",
       category: "cpu-preemptive",
     },
-  ]
+  ];
 
   const filteredAlgorithms = useMemo(() => {
-    const allAlgorithms = [...diskAlgorithms, ...cpuNonPreemptive, ...cpuPreemptive]
+    const allAlgorithms = [
+      ...diskAlgorithms,
+      ...cpuNonPreemptive,
+      ...cpuPreemptive,
+    ];
 
     if (!searchQuery.trim()) {
       return {
@@ -129,35 +133,48 @@ export default function HomePage() {
         cpuNonPreemptive,
         cpuPreemptive,
         hasResults: true,
-      }
+      };
     }
 
-    const query = searchQuery.toLowerCase()
+    const query = searchQuery.toLowerCase();
     const filtered = allAlgorithms.filter(
       (algorithm) =>
         algorithm.name.toLowerCase().includes(query) ||
         algorithm.abbr.toLowerCase().includes(query) ||
-        algorithm.description.toLowerCase().includes(query),
-    )
+        algorithm.description.toLowerCase().includes(query)
+    );
 
     return {
       disk: filtered.filter((alg) => alg.category === "disk"),
-      cpuNonPreemptive: filtered.filter((alg) => alg.category === "cpu-non-preemptive"),
-      cpuPreemptive: filtered.filter((alg) => alg.category === "cpu-preemptive"),
+      cpuNonPreemptive: filtered.filter(
+        (alg) => alg.category === "cpu-non-preemptive"
+      ),
+      cpuPreemptive: filtered.filter(
+        (alg) => alg.category === "cpu-preemptive"
+      ),
       hasResults: filtered.length > 0,
-    }
-  }, [searchQuery])
+    };
+  }, [searchQuery]);
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const handleVisualize = (algorithm: { abbr: string; category: string }) => {
-    if (algorithm.abbr === "FCFS" && algorithm.category === "cpu-non-preemptive") {
-      router.push("/fcfs")
+    if (
+      algorithm.abbr === "FCFS" &&
+      algorithm.category === "cpu-non-preemptive"
+    ) {
+      router.push("/fcfs");
+    }
+    if (
+      algorithm.abbr === "SJF" &&
+      algorithm.category === "cpu-non-preemptive"
+    ) {
+      router.push("/sjf");
     }
     // Add other algorithm routes here in the future
-  }
+  };
 
   return (
     <div className="min-h-screen transition-all duration-500 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
@@ -185,7 +202,11 @@ export default function HomePage() {
                 onClick={toggleTheme}
                 className="transition-all duration-300 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 bg-transparent"
               >
-                {theme === "dark" ? <Sun className="w-4 h-4 mr-2" /> : <Moon className="w-4 h-4 mr-2" />}
+                {theme === "dark" ? (
+                  <Sun className="w-4 h-4 mr-2" />
+                ) : (
+                  <Moon className="w-4 h-4 mr-2" />
+                )}
                 {theme === "dark" ? "Light" : "Dark"}
               </Button>
             </div>
@@ -201,8 +222,8 @@ export default function HomePage() {
             Master Scheduling Algorithms
           </h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto transition-colors duration-500 text-gray-600 dark:text-gray-300">
-            Interactive visualizations for disk scheduling and CPU scheduling algorithms. Learn through animation and
-            hands-on practice.
+            Interactive visualizations for disk scheduling and CPU scheduling
+            algorithms. Learn through animation and hands-on practice.
           </p>
 
           {/* Search Bar */}
@@ -245,7 +266,9 @@ export default function HomePage() {
                       className={`w-full h-32 ${algorithm.color} rounded-lg mb-4 flex items-center justify-center group-hover:scale-105 transition-transform`}
                     >
                       <div className="text-center">
-                        <div className="text-white text-2xl font-bold mb-2">{algorithm.abbr}</div>
+                        <div className="text-white text-2xl font-bold mb-2">
+                          {algorithm.abbr}
+                        </div>
                         <div className="w-16 h-1 bg-white/30 mx-auto"></div>
                       </div>
                     </div>
@@ -284,44 +307,49 @@ export default function HomePage() {
             </div>
 
             {/* Non-Preemptive */}
-            {(!searchQuery || filteredAlgorithms.cpuNonPreemptive.length > 0) && (
+            {(!searchQuery ||
+              filteredAlgorithms.cpuNonPreemptive.length > 0) && (
               <div className="mb-12">
                 <h4 className="text-xl font-semibold mb-6 transition-colors duration-500 text-gray-800 dark:text-gray-200">
                   Non-Preemptive
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredAlgorithms.cpuNonPreemptive.map((algorithm, index) => (
-                    <Card
-                      key={index}
-                      className="hover:shadow-lg transition-all duration-300 cursor-pointer group bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:bg-gray-750"
-                    >
-                      <CardContent className="p-6">
-                        <div
-                          className={`w-full h-32 ${algorithm.color} rounded-lg mb-4 flex items-center justify-center group-hover:scale-105 transition-transform`}
-                        >
-                          <div className="text-center">
-                            <div className="text-white text-2xl font-bold mb-2">{algorithm.abbr}</div>
-                            <div className="w-16 h-1 bg-white/30 mx-auto"></div>
+                  {filteredAlgorithms.cpuNonPreemptive.map(
+                    (algorithm, index) => (
+                      <Card
+                        key={index}
+                        className="hover:shadow-lg transition-all duration-300 cursor-pointer group bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:bg-gray-750"
+                      >
+                        <CardContent className="p-6">
+                          <div
+                            className={`w-full h-32 ${algorithm.color} rounded-lg mb-4 flex items-center justify-center group-hover:scale-105 transition-transform`}
+                          >
+                            <div className="text-center">
+                              <div className="text-white text-2xl font-bold mb-2">
+                                {algorithm.abbr}
+                              </div>
+                              <div className="w-16 h-1 bg-white/30 mx-auto"></div>
+                            </div>
                           </div>
-                        </div>
-                        <h5 className="font-semibold mb-2 transition-colors duration-500 text-gray-900 dark:text-white">
-                          {algorithm.name}
-                        </h5>
-                        <p className="text-sm transition-colors duration-500 text-gray-600 dark:text-gray-300">
-                          {algorithm.description}
-                        </p>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-4 w-full transition-all duration-300 bg-transparent border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-                          onClick={() => handleVisualize(algorithm)}
-                        >
-                          <Play className="w-4 h-4 mr-2" />
-                          Visualize
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  ))}
+                          <h5 className="font-semibold mb-2 transition-colors duration-500 text-gray-900 dark:text-white">
+                            {algorithm.name}
+                          </h5>
+                          <p className="text-sm transition-colors duration-500 text-gray-600 dark:text-gray-300">
+                            {algorithm.description}
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-4 w-full transition-all duration-300 bg-transparent border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                            onClick={() => handleVisualize(algorithm)}
+                          >
+                            <Play className="w-4 h-4 mr-2" />
+                            Visualize
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )
+                  )}
                 </div>
               </div>
             )}
@@ -343,7 +371,9 @@ export default function HomePage() {
                           className={`w-full h-32 ${algorithm.color} rounded-lg mb-4 flex items-center justify-center group-hover:scale-105 transition-transform`}
                         >
                           <div className="text-center">
-                            <div className="text-white text-2xl font-bold mb-2">{algorithm.abbr}</div>
+                            <div className="text-white text-2xl font-bold mb-2">
+                              {algorithm.abbr}
+                            </div>
                             <div className="w-16 h-1 bg-white/30 mx-auto"></div>
                           </div>
                         </div>
@@ -376,11 +406,16 @@ export default function HomePage() {
       <footer className="border-t mt-20 transition-all duration-500 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center transition-colors duration-500 text-gray-600 dark:text-gray-300">
-            <p className="mb-2">AlgoFlow - Interactive Algorithm Visualization Platform</p>
-            <p className="text-sm">Learn scheduling algorithms through hands-on visualization and practice</p>
+            <p className="mb-2">
+              AlgoFlow - Interactive Algorithm Visualization Platform
+            </p>
+            <p className="text-sm">
+              Learn scheduling algorithms through hands-on visualization and
+              practice
+            </p>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }
