@@ -173,6 +173,12 @@ export default function HomePage() {
     ) {
       router.push("/sjf");
     }
+    if (
+      algorithm.abbr === "NPP" &&
+      algorithm.category === "cpu-non-preemptive"
+    ) {
+      router.push("/npp");
+    }
     // Add other algorithm routes here in the future
   };
 
